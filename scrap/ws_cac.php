@@ -13,37 +13,24 @@ function bitacora($msg)
     echo sprintf("<pre>%s</pre>", print_r($msg, true) . "\r\n");
 }
 
-class Agricultura
-{
-    public $description = '';
-    public $valor = '';
-
-    function __construct($descripcion, $valor)
-    {
-        $this->description = trim(htmlentities($descripcion, ENT_QUOTES, 'UTF-8'));
-        $this->valor = trim($valor);
-    }
-}
-
 $url = 'https://cac.bcr.com.ar/es/precios-de-pizarra';
 
 $html = file_get_html($url);
 
 ### Agricultura
 $listaAgricultura = [];
-//$html->dump(true);
+
 foreach ($html->find('div[class=board-wrapper]') as $div) {
-    $desc = $div->children(0)->innertext();
-    $desc = preg_replace('/<span.*\/span>/', '', $desc);
+    $desc = $div->children(0)->plaintext;    
+    $valor = $div->children(1)->plaintext;
 
-    $valor = $div->children(1)->innertext();
-
-
-    $obj = new Agricultura($desc, $valor);
-    $listaAgricultura[] = $obj;
+    $listaAgricultura[] = [
+        'descripcion' => trim(htmlentities($descripcion)),
+        'valor' => trim($valor)
+    ];
 }
 echo "<pre>";
-print_r(json_encode($listaAgricultura));
+print_r(json_encode($listaAgricultura,JSON_UNESCAPED_SLASHES));
 echo "</pre>";
 
 
