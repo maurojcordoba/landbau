@@ -29,12 +29,6 @@ curl_close($curl);
 
 require 'lib/simplehtmldom/simple_html_dom.php';
 
-function bitacora($msg)
-{
-    #file_put_contents('m.txt',print_r($msg,true) . "\r\n", FILE_APPEND);
-    echo sprintf("<pre>%s</pre>", print_r($msg, true) . "\r\n");
-}
-
 $url = 'http://www.mercadodeliniers.com.ar/dll/hacienda2.dll/haciinfo000013';
 
 //$html = file_get_html($url);
