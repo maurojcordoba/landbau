@@ -17,7 +17,7 @@ class Database
         }           
     }
  
-    public function select($query = "" , $params = [])
+    private function select($query = "" , $params = [])
     {
         try {
             $stmt = $this->executeStatement( $query , $params );
@@ -31,11 +31,11 @@ class Database
         return false;
     }
 
-    public function insertData($query = "", $web, $data)
+    public function insert($web, $json_data)
     {
         try {
-            $stmt = $this->connection->prepare( $query );
-            $stmt->bind_param('ss',$web, $data);
+            $stmt = $this->connection->prepare( 'INSERT INTO ws_data (web,json_data) VALUES (?,?)' );
+            $stmt->bind_param('ss',$web, $json_data);
             $result = $stmt->execute();               
             $stmt->close();
  
@@ -44,8 +44,21 @@ class Database
             throw New Exception( $e->getMessage() );
         }
         return false;
+    }    
+    
+    public function getData($web)
+    {
+        try {
+           
+            $result = $this->select('SELECT json_data from ws_data WHERE web = ? ORDER BY created DESC LIMIT 1', ["s",$web]);
+
+            return $result['0']['json_data'];
+        } catch(Exception $e) {
+            throw New Exception( $e->getMessage() );
+        }
+        return false;
     }
- 
+
     private function executeStatement($query = "" , $params = [])
     {
         try {

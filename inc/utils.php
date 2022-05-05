@@ -75,3 +75,8 @@ function Utf8_ansi($valor = '')
     );
     return strtr($valor, $utf8_ansi2);
 }
+
+function normalize($str){
+    return str_replace('&nbsp;', ' ', $str);
+}
+
